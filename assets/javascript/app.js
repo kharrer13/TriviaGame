@@ -129,8 +129,8 @@ var questions = [
     },
     {
         question: 'Which American city invented plastic vomit?',
-        answers: ['Chicago', 'Detroit', 'Columbus', 'Baltimore']
-
+        answers: ['Chicago', 'Detroit', 'Columbus', 'Baltimore'],
+        correct: ['correct', 'incorrect', 'incorrect', 'incorrect']
     },
     {
         question: "In ‘Ben Hur’, which modern thing can be seen during the chariot scene?",
@@ -243,6 +243,25 @@ $(document).ready(function () {
         $('#game-board').prepend(newTimer);
         questionsGen(questionCount);
     });
+
+    $('#questions-answers').click('.answer-button', function (event) {
+        // $('#questions-answers').empty();
+        questionCount++;
+        timeLeft = 30;
+        var id = event.target.data - correct;
+        var correctness = $(this).attr('data-correct');
+        console.log(this)
+        console.log(event);
+        console.log(id);
+        console.log(correctness);
+
+        if (correctness === 'correct') {
+            correct++;
+        } else {
+            incorrect++;
+        }
+        questionsGen(questionCount);
+    });
 });
 
 function timer() {
@@ -256,15 +275,20 @@ function timer() {
 };
 
 function questionsGen(questNum) {
-    var newQuestion = $('<div>').attr('id', 'questions').text(questions[questionCount].question);
-    $('#game-board').append(newQuestion);
-    for (let i = 0; i < questions[questionCount].answers.length; i++) {
-        var ansDiv = $('<div>');
-        var ansButt = $('<button>').addClass('answer-button col-md-6 col-md-offset-2')
-            .attr('data-correct', questions[questionCount].correct[i])
-            .text(questions[questionCount].answers[i]);
-        ansDiv.append(ansButt);
-        $('#game-board').append(ansDiv);
-        
+    $('#questions-answers').empty();
+    if (questionCount < 20) {
+        var newQuestion = $('<div>').attr('id', 'questions').text(questions[questionCount].question);
+        $('#questions-answers').append(newQuestion);
+        for (let i = 0; i < questions[questionCount].answers.length; i++) {
+            var ansDiv = $('<div>');
+            var ansButt = $('<button>').addClass('answer-button col-md-6 col-md-offset-2')
+                .attr('data-correct', questions[questionCount].correct[i])
+                .text(questions[questionCount].answers[i]);
+            ansDiv.append(ansButt);
+            $('#questions-answers').append(ansDiv);
+        }
+    } else {
+        var newP = $('<p>').text('You answered ' + correct + ' questions correctly and ' + incorrect + ' incorrectly.')
+        $('#questions-answers').append(newP);
     }
 }
