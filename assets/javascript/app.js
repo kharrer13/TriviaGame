@@ -235,6 +235,12 @@ var question = "";
 var questionCount = 0;
 
 $(document).ready(function () {
+    if (timeLeft === 0) {
+        incorrect++;
+        questionCount++;
+        questionsGen(questionCount);
+    };
+
     $('#start').click(function (event) {
         timerVar = setInterval(timer, 1000);
         playing = true;
@@ -242,6 +248,7 @@ $(document).ready(function () {
         var newTimer = $('<div>').attr('id', 'timer').text(timeLeft + ' seconds remaining');
         $('#game-board').prepend(newTimer);
         questionsGen(questionCount);
+
     });
 
     $('#questions-answers').click('.answer-button', function (event) {
